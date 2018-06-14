@@ -1,4 +1,10 @@
 /NeuroML2/report.Sim_IClamp_PV.txt
 /NeuroML2/LEMS_Sim_IClamp_PV.xml
 /NeuroML2/Sim_IClamp_PV.json
-/NeuroML2/Sim_IClamp_PV.pop_PV.v.dat
+/NeuroML2/*.dat
+/NeuroML2/IClamp_PV.gv
+/NeuroML2/IClamp_PV.gv.png
+/NeuroML2/*_nrn.py
+/NeuroML2/x86_64
+/NeuroML2/*.mod
+/NeuroML2/*.hoc

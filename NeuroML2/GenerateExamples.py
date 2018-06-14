@@ -11,6 +11,13 @@ def generate(ref):
     net = Network(id=ref)
     net.notes = "A simple network: %s."%ref
     net.temperature = 37 # degC
+    
+
+    ################################################################################
+    ###   Add some regions
+    
+    r1 = RectangularRegion(id='region1', x=0,y=0,z=0,width=1000,height=100,depth=1000)
+    net.regions.append(r1)
 
 
     ################################################################################
@@ -23,7 +30,13 @@ def generate(ref):
     ###   Add some populations
 
     comp = 'PV'
-    pop_pv = Population(id='pop_%s'%comp, size=1, component=comp, properties={'color':colors[comp]})
+    pop_pv = Population(id='pop_%s'%comp, 
+                        size=1, 
+                        component=comp, 
+                        properties={'color':colors[comp]},
+                        random_layout = RandomLayout(region=r1.id))
+                        
+    #pop_pv.positions.append('0,0,0')
 
     net.populations.append(pop_pv)
 
@@ -39,17 +52,17 @@ def generate(ref):
 
     net.projections[0].random_connectivity=RandomConnectivity(probability=0.5)'''
     
+    
     ################################################################################
     ###   Add some inputs
 
-
     input_source = InputSource(id='iclamp0', 
-                               pynn_input='DCSource', 
-                               parameters={'amplitude':0.0025, 'start':50., 'stop':250.})
+                               neuroml2_input='PulseGenerator', 
+                               parameters={'amplitude':'2.5pA', 'delay':'50ms', 'duration':'200ms'})
                                
     net.input_sources.append(input_source)
 
-    net.inputs.append(Input(id='stim',
+    net.inputs.append(Input(id='Stim0',
                             input_source=input_source.id,
                             population=pop_pv.id,
                             percentage=100))

@@ -13,12 +13,24 @@
         "input_sources": [
             {
                 "iclamp0": {
-                    "pynn_input": "DCSource", 
+                    "neuroml2_input": "PulseGenerator", 
                     "parameters": {
-                        "start": 50.0, 
-                        "stop": 250.0, 
-                        "amplitude": 0.0025
+                        "delay": "50ms", 
+                        "duration": "200ms", 
+                        "amplitude": "2.5pA"
                     }
+                }
+            }
+        ], 
+        "regions": [
+            {
+                "region1": {
+                    "x": 0.0, 
+                    "y": 0.0, 
+                    "z": 0.0, 
+                    "width": 1000.0, 
+                    "height": 100.0, 
+                    "depth": 1000.0
                 }
             }
         ], 
@@ -29,13 +41,16 @@
                     "component": "PV", 
                     "properties": {
                         "color": "0 0 .8"
+                    }, 
+                    "random_layout": {
+                        "region": "region1"
                     }
                 }
             }
         ], 
         "inputs": [
             {
-                "stim": {
+                "Stim0": {
                     "input_source": "iclamp0", 
                     "population": "pop_PV", 
                     "percentage": 100.0
