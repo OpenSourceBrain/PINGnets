@@ -1,0 +1,116 @@
+<neuroml xmlns="http://www.neuroml.org/schema/neuroml2" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://www.neuroml.org/schema/neuroml2  https://raw.github.com/NeuroML/NeuroML2/development/Schemas/NeuroML2/NeuroML_v2beta5.xsd" 
+         id="wb1">
+
+    <ionChannelHH id="leak" conductance="0.1nS" />
+
+    <ionChannelHH id="na_chan" conductance="35nS" species="na">
+
+        <gateHHrates type="gateHHratesInstantaneous" id="m" instances="3">
+            <forwardRate type="HHExpLinearRate" rate="1per_ms" midpoint="-35mV" scale="10mV"/>
+            <reverseRate type="HHExpRate" rate="4per_ms" midpoint="-60mV" scale="-18mV"/>
+        </gateHHrates>
+    
+        <gateHHrates id="h" instances="1"> 
+            <q10Settings type="q10Fixed" fixedQ10="5"/>
+            <forwardRate type="HHExpRate" rate="0.07per_ms" midpoint="-58mV" scale="-20mV"/>
+            <reverseRate type="HHSigmoidRate" rate="1per_ms" midpoint="-28mV" scale="10mV"/>
+        </gateHHrates>
+
+    </ionChannelHH>
+
+    <ionChannelHH id="k_chan" conductance="9nS" species="k"> 
+
+        <gateHHrates id="n" instances="4">
+            <q10Settings type="q10Fixed" fixedQ10="5"/>
+            <forwardRate type="HHExpLinearRate" rate="0.1per_ms" midpoint="-34mV" scale="10mV"/>
+            <reverseRate type="HHExpRate" rate="0.125per_ms" midpoint="-44mV" scale="-80mV"/>
+        </gateHHrates>
+
+    </ionChannelHH>
+
+
+<!-- Cellular properties -->
+
+    <cell id="PV">
+
+        <morphology id="just_a_cylinder">
+
+            <segment id="0" name="Soma">
+                <proximal x="0.0" y="0.0" z="0.0" diameter="10.0"/>
+                <distal x="0.0" y="0.0" z="3.1831" diameter="10.0"/>
+            </segment>
+
+            <segmentGroup id="soma_group">
+                <member segment="0"/>
+            </segmentGroup>
+
+        </morphology>
+
+
+        <biophysicalProperties id="biophys">
+
+            <membraneProperties>
+
+                <channelDensity condDensity="35mS_per_cm2" id="na_all" ionChannel="na_chan" erev="55.0 mV" ion="na"/>
+                <channelDensity condDensity="9mS_per_cm2" id="k_all" ionChannel="k_chan" erev="-90.0 mV" ion="k"/>
+                <channelDensity condDensity="0.1mS_per_cm2" id="passive" ionChannel="leak" erev="-65 mV" ion="non_specific"/>
+
+                <spikeThresh value="0 mV"/>
+                <specificCapacitance value="1.0 uF_per_cm2"/>
+                <initMembPotential value="-70.0 mV"/>
+
+            </membraneProperties>
+
+            <intracellularProperties>
+
+                <resistivity value="0.1 kohm_cm"/> <!-- Could be anything (because it's only one compartment)-->
+
+            </intracellularProperties>
+
+        </biophysicalProperties>
+
+    </cell>
+
+<!-- new ComponentTypes for Ion channel -->
+
+    <ComponentType name="gateHHratesInstantaneous"
+                   extends="gateHHrates"
+                   description="Gate which follows the general Hodgkin Huxley formalism, except for tau = 0">
+
+        <Child name="notes" type="notes"/>
+
+        <Child name="forwardRate" type="baseVoltageDepRate"/>
+        <Child name="reverseRate" type="baseVoltageDepRate"/>
+
+        <Constant name="SEC" dimension="time" value="1s"/>
+
+        <Exposure name="alpha" dimension="per_time"/>
+        <Exposure name="beta" dimension="per_time"/>
+
+        <Exposure name="tau" dimension="time"/>
+        <Exposure name="inf" dimension="none"/>
+        
+        <Exposure name="rateScale" dimension="none"/>
+
+        <Dynamics>
+
+            <DerivedVariable name="alpha" dimension="per_time" exposure="alpha" select="forwardRate/r"/>
+            <DerivedVariable name="beta" dimension="per_time" exposure="beta" select="reverseRate/r"/>
+
+            <DerivedVariable name="inf" dimension="none" exposure="inf" value="alpha/(alpha+beta)"/>
+
+            <DerivedVariable name="tau" dimension="time" exposure="tau" value="0 * SEC"/>
+
+            <DerivedVariable name="q"  exposure="q" dimension="none" value="inf"/>
+            
+            <DerivedVariable name="rateScale" exposure="rateScale" dimension="none" value="1"/>
+
+            <DerivedVariable name="fcond" exposure="fcond" dimension="none" value="q^instances"/>
+
+        </Dynamics>
+        
+    </ComponentType>
+
+</neuroml>
