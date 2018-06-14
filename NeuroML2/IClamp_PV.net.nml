@@ -1,0 +1,12 @@
+<neuroml xmlns="http://www.neuroml.org/schema/neuroml2"  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.neuroml.org/schema/neuroml2 https://raw.github.com/NeuroML/NeuroML2/development/Schemas/NeuroML2/NeuroML_v2beta5.xsd" id="IClamp_PV">
+    <notes>Generated network</notes>
+    <include href="WangBuzsaki.cell.nml"/>
+    <pulseGenerator id="iclamp0" delay="50.0ms" duration="200.0ms" amplitude="0.0025nA"/>
+    <network id="IClamp_PV" type="networkWithTemperature" temperature="37.0degC">
+        <notes>A simple network: IClamp_PV.</notes>
+        <population id="pop_PV" component="PV" size="1"/>
+        <inputList id="stim" population="pop_PV" component="iclamp0">
+            <input id="0" target="../pop_PV[0]" destination="synapses"/>
+        </inputList>
+    </network>
+</neuroml>

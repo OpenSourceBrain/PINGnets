@@ -1,0 +1,46 @@
+{
+    "IClamp_PV": {
+        "version": "NeuroMLlite v0.1.4", 
+        "temperature": 37.0, 
+        "notes": "A simple network: IClamp_PV.", 
+        "cells": [
+            {
+                "PV": {
+                    "neuroml2_source_file": "WangBuzsaki.cell.nml"
+                }
+            }
+        ], 
+        "input_sources": [
+            {
+                "iclamp0": {
+                    "pynn_input": "DCSource", 
+                    "parameters": {
+                        "start": 50.0, 
+                        "stop": 250.0, 
+                        "amplitude": 0.0025
+                    }
+                }
+            }
+        ], 
+        "populations": [
+            {
+                "pop_PV": {
+                    "size": 1, 
+                    "component": "PV", 
+                    "properties": {
+                        "color": "0 0 .8"
+                    }
+                }
+            }
+        ], 
+        "inputs": [
+            {
+                "stim": {
+                    "input_source": "iclamp0", 
+                    "population": "pop_PV", 
+                    "percentage": 100.0
+                }
+            }
+        ]
+    }
+}
