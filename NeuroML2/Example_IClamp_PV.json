@@ -10,14 +10,21 @@
                 }
             }
         ], 
+        "synapses": [
+            {
+                "wbsFake": {
+                    "lems_source_file": "WangBuzsakiSynapse.xml"
+                }
+            }
+        ], 
         "input_sources": [
             {
                 "iclamp0": {
-                    "neuroml2_input": "PulseGenerator", 
+                    "neuroml2_input": "PoissonFiringSynapse", 
                     "parameters": {
-                        "delay": "50ms", 
-                        "duration": "200ms", 
-                        "amplitude": "2.5pA"
+                        "average_rate": "50 Hz", 
+                        "synapse": "wbsFake", 
+                        "spike_target": "./wbsFake"
                     }
                 }
             }
@@ -37,7 +44,7 @@
         "populations": [
             {
                 "pop_PV": {
-                    "size": 1, 
+                    "size": 10, 
                     "component": "PV", 
                     "properties": {
                         "color": "0 0 .8"

@@ -24,6 +24,15 @@ def generate(ref):
     ###   Add some cells
 
     net.cells.append(Cell(id='PV', neuroml2_source_file='WangBuzsaki.cell.nml'))
+    
+
+
+    ################################################################################
+    ###   Add some synapses
+    
+    ampa = 'wbsFake'
+    net.synapses.append(Synapse(id=ampa, 
+                                lems_source_file='WangBuzsakiSynapse.xml'))
 
 
     ################################################################################
@@ -31,7 +40,7 @@ def generate(ref):
 
     comp = 'PV'
     pop_pv = Population(id='pop_%s'%comp, 
-                        size=1, 
+                        size=10, 
                         component=comp, 
                         properties={'color':colors[comp]},
                         random_layout = RandomLayout(region=r1.id))
@@ -56,9 +65,14 @@ def generate(ref):
     ################################################################################
     ###   Add some inputs
 
+    ''''<poissonFiringSynapse id="poissonFiringSyn" averageRate="10 Hz" synapse="synInput" spikeTarget="./synInput"/>'''
     input_source = InputSource(id='iclamp0', 
+                               neuroml2_input='PoissonFiringSynapse', 
+                               parameters={'average_rate':'50 Hz', 'synapse':ampa, 'spike_target':"./%s"%ampa})
+                               
+    '''input_source = InputSource(id='iclamp0', 
                                neuroml2_input='PulseGenerator', 
-                               parameters={'amplitude':'2.5pA', 'delay':'50ms', 'duration':'200ms'})
+                               parameters={'amplitude':'2.5pA', 'delay':'50ms', 'duration':'200ms'})'''
                                
     net.input_sources.append(input_source)
 

@@ -1,18 +1,54 @@
 <neuroml xmlns="http://www.neuroml.org/schema/neuroml2"  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.neuroml.org/schema/neuroml2 https://raw.github.com/NeuroML/NeuroML2/development/Schemas/NeuroML2/NeuroML_v2beta5.xsd" id="IClamp_PV">
     <notes>Generated network</notes>
     <include href="WangBuzsaki.cell.nml"/>
-    <pulseGenerator id="iclamp0" delay="50ms" duration="200ms" amplitude="2.5pA"/>
+    <poissonFiringSynapse id="iclamp0" averageRate="50 Hz" synapse="wbsFake" spikeTarget="./wbsFake"/>
     <network id="IClamp_PV" type="networkWithTemperature" temperature="37.0degC">
         <notes>A simple network: IClamp_PV.</notes>
-        <population id="pop_PV" component="PV" size="1" type="populationList">
+        <population id="pop_PV" component="PV" size="10" type="populationList">
             <property tag="color" value="0 0 .8"/>
             <property tag="region" value="region1"/>
             <instance id="0">
                 <location x="966.453535692138757" y="44.073259917535268" z="7.491470058587191"/>
             </instance>
+            <instance id="1">
+                <location x="910.975962449124154" y="93.926899736376399" z="582.227573058949133"/>
+            </instance>
+            <instance id="2">
+                <location x="671.563481487985086" y="8.393822683708397" z="766.480932791796249"/>
+            </instance>
+            <instance id="3">
+                <location x="236.809775363117751" y="3.081402172660996" z="788.772717236283484"/>
+            </instance>
+            <instance id="4">
+                <location x="346.088965597123092" y="62.328147503916853" z="615.815695103615212"/>
+            </instance>
+            <instance id="5">
+                <location x="148.55463870828757" y="18.309064740993165" z="114.412969688687639"/>
+            </instance>
+            <instance id="6">
+                <location x="14.618780486909122" y="48.675154060475833" z="964.901560916215658"/>
+            </instance>
+            <instance id="7">
+                <location x="64.562280977186077" y="54.108818555113025" z="465.898559008309576"/>
+            </instance>
+            <instance id="8">
+                <location x="601.463449561051448" y="8.892882999066231" z="579.002686187366521"/>
+            </instance>
+            <instance id="9">
+                <location x="269.585503819448263" y="55.643256055621556" z="644.634234178282668"/>
+            </instance>
         </population>
         <inputList id="Stim0" population="pop_PV" component="iclamp0">
             <input id="0" target="../pop_PV/0/PV" destination="synapses"/>
+            <input id="1" target="../pop_PV/1/PV" destination="synapses"/>
+            <input id="2" target="../pop_PV/2/PV" destination="synapses"/>
+            <input id="3" target="../pop_PV/3/PV" destination="synapses"/>
+            <input id="4" target="../pop_PV/4/PV" destination="synapses"/>
+            <input id="5" target="../pop_PV/5/PV" destination="synapses"/>
+            <input id="6" target="../pop_PV/6/PV" destination="synapses"/>
+            <input id="7" target="../pop_PV/7/PV" destination="synapses"/>
+            <input id="8" target="../pop_PV/8/PV" destination="synapses"/>
+            <input id="9" target="../pop_PV/9/PV" destination="synapses"/>
         </inputList>
     </network>
 </neuroml>
