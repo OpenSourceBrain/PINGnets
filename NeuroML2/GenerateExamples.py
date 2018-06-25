@@ -11,6 +11,7 @@ def generate(ref):
     net = Network(id=ref)
     net.notes = "A simple network: %s."%ref
     net.temperature = 37 # degC
+    net.parameters = {}
     
 
     ################################################################################
@@ -23,7 +24,8 @@ def generate(ref):
     ################################################################################
     ###   Add some cells
 
-    net.cells.append(Cell(id='PV', neuroml2_source_file='WangBuzsaki.cell.nml'))
+    if 'PV' in ref:
+        net.cells.append(Cell(id='PV', neuroml2_source_file='WangBuzsaki.cell.nml'))
     
 
 
@@ -35,19 +37,22 @@ def generate(ref):
                                 lems_source_file='WangBuzsakiSynapse.xml'))
 
 
+
     ################################################################################
     ###   Add some populations
 
-    comp = 'PV'
-    pop_pv = Population(id='pop_%s'%comp, 
-                        size=10, 
-                        component=comp, 
-                        properties={'color':colors[comp]},
-                        random_layout = RandomLayout(region=r1.id))
-                        
-    #pop_pv.positions.append('0,0,0')
+    if 'PV' in ref:
+        comp = 'PV'
+        size = 1 if 'IClamp' in ref else 10
+        
+        pop_pv = Population(id='pop_%s'%comp, 
+                            size=size, 
+                            component=comp, 
+                            properties={'color':colors[comp]},
+                            random_layout = RandomLayout(region=r1.id))
 
-    net.populations.append(pop_pv)
+
+        net.populations.append(pop_pv)
 
 
     ################################################################################
@@ -61,25 +66,36 @@ def generate(ref):
 
     net.projections[0].random_connectivity=RandomConnectivity(probability=0.5)'''
     
-    
+ 
     ################################################################################
     ###   Add some inputs
+    
+    if 'IClamp' in ref:
+        net.parameters['stim_amp'] = '100pA'
+        input_source = InputSource(id='iclamp_0', 
+                                   neuroml2_input='PulseGenerator', 
+                                   parameters={'amplitude':'1pA', 'delay':'50ms', 'duration':'100ms'})
 
-    ''''<poissonFiringSynapse id="poissonFiringSyn" averageRate="10 Hz" synapse="synInput" spikeTarget="./synInput"/>'''
-    input_source = InputSource(id='iclamp0', 
-                               neuroml2_input='PoissonFiringSynapse', 
-                               parameters={'average_rate':'50 Hz', 'synapse':ampa, 'spike_target':"./%s"%ampa})
-                               
-    '''input_source = InputSource(id='iclamp0', 
-                               neuroml2_input='PulseGenerator', 
-                               parameters={'amplitude':'2.5pA', 'delay':'50ms', 'duration':'200ms'})'''
-                               
-    net.input_sources.append(input_source)
+        net.input_sources.append(input_source)
 
-    net.inputs.append(Input(id='Stim0',
-                            input_source=input_source.id,
-                            population=pop_pv.id,
-                            percentage=100))
+        net.inputs.append(Input(id='Stim0',
+                                input_source=input_source.id,
+                                population=pop_pv.id,
+                                percentage=100))
+        
+    else:
+
+        input_source = InputSource(id='pfs0', 
+                                   neuroml2_input='PoissonFiringSynapse', 
+                                   parameters={'average_rate':'50 Hz', 'synapse':ampa, 'spike_target':"./%s"%ampa})
+
+        net.input_sources.append(input_source)
+
+
+        net.inputs.append(Input(id='Stim0',
+                                input_source=input_source.id,
+                                population=pop_pv.id,
+                                percentage=100))
 
 
     ################################################################################
@@ -115,5 +131,6 @@ def generate(ref):
 
 if __name__ == "__main__":
     
+    #generate('IFcurve_PV')
     generate('IClamp_PV')
     

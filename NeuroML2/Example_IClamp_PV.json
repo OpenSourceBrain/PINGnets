@@ -2,6 +2,9 @@
     "IClamp_PV": {
         "version": "NeuroMLlite v0.1.4", 
         "temperature": 37.0, 
+        "parameters": {
+            "stim_amp": "100pA"
+        }, 
         "notes": "A simple network: IClamp_PV.", 
         "cells": [
             {
@@ -19,12 +22,12 @@
         ], 
         "input_sources": [
             {
-                "iclamp0": {
-                    "neuroml2_input": "PoissonFiringSynapse", 
+                "iclamp_0": {
+                    "neuroml2_input": "PulseGenerator", 
                     "parameters": {
-                        "average_rate": "50 Hz", 
-                        "synapse": "wbsFake", 
-                        "spike_target": "./wbsFake"
+                        "delay": "50ms", 
+                        "duration": "100ms", 
+                        "amplitude": "1pA"
                     }
                 }
             }
@@ -44,7 +47,7 @@
         "populations": [
             {
                 "pop_PV": {
-                    "size": 10, 
+                    "size": 1, 
                     "component": "PV", 
                     "properties": {
                         "color": "0 0 .8"
@@ -58,7 +61,7 @@
         "inputs": [
             {
                 "Stim0": {
-                    "input_source": "iclamp0", 
+                    "input_source": "iclamp_0", 
                     "population": "pop_PV", 
                     "percentage": 100.0
                 }
