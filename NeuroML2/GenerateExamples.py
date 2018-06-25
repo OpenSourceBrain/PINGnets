@@ -71,10 +71,10 @@ def generate(ref):
     ###   Add some inputs
     
     if 'IClamp' in ref:
-        net.parameters['stim_amp'] = '100pA'
+        net.parameters['stim_amp'] = '1.25pA'
         input_source = InputSource(id='iclamp_0', 
                                    neuroml2_input='PulseGenerator', 
-                                   parameters={'amplitude':'1pA', 'delay':'50ms', 'duration':'100ms'})
+                                   parameters={'amplitude':'stim_amp', 'delay':'50ms', 'duration':'500ms'})
 
         net.input_sources.append(input_source)
 
@@ -112,7 +112,7 @@ def generate(ref):
 
     sim = Simulation(id='Sim_%s'%ref,
                      network=new_file,
-                     duration='300',
+                     duration='600',
                      dt='0.025',
                      recordTraces={'all':'*'})
 

@@ -3,7 +3,7 @@
         "version": "NeuroMLlite v0.1.4", 
         "temperature": 37.0, 
         "parameters": {
-            "stim_amp": "100pA"
+            "stim_amp": "1.25pA"
         }, 
         "notes": "A simple network: IClamp_PV.", 
         "cells": [
@@ -26,8 +26,8 @@
                     "neuroml2_input": "PulseGenerator", 
                     "parameters": {
                         "delay": "50ms", 
-                        "duration": "100ms", 
-                        "amplitude": "1pA"
+                        "duration": "500ms", 
+                        "amplitude": "stim_amp"
                     }
                 }
             }
