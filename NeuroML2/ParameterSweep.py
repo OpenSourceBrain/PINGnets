@@ -5,8 +5,12 @@ from neuromllite.utils import load_simulation_json,load_network_json
 from neuromllite.NetworkGenerator import generate_and_run
 
 from pyneuroml import pynml
+from pyelectro import analysis
+
+import pprint; pp = pprint.PrettyPrinter(depth=6)
 
 class ParameterSweep():
+    
 
     def __init__(self, runner, vary, fixed={}):
 
@@ -16,8 +20,11 @@ class ParameterSweep():
         self.vary = vary
         self.complete = 0
         self.total_todo = 1
+        self.report = {}
         for v in vary:
             self.total_todo *= len(vary[v])
+            
+        self.analysis_var={'peak_delta':0,'baseline':0,'dvdt_threshold':0, 'peak_threshold':0}
 
 
     def _rem_key(self, d, key):
@@ -30,7 +37,7 @@ class ParameterSweep():
 
         print('============================================================= \n     Instance (%s/%s): %s' % (self.complete, self.total_todo, kwargs))
         '''     '''
-        self.runner.run_once( ** kwargs)
+        return self.runner.run_once( ** kwargs)
 
 
     def _sweep(self, v, f, reference=''):
@@ -54,17 +61,50 @@ class ParameterSweep():
                 all_params = f
                 all_params[keys[0]] = val
                 r = '%s_%s%s' % (reference, keys[0], val)
-                all_params['reference'] = 'REFb%s%s' % (self.complete, r)
-                self._run_instance( ** all_params)
+                ref_here = 'REFb%s%s' % (self.complete, r)
+                all_params['reference'] = ref_here
+                self.report[ref_here] = {}
+                self.report[ref_here]['parameters'] = all_params
+                traces, events = self._run_instance( ** all_params)
+                
+                print('=============')
+                print traces.keys()
+                times = traces['t']
+                volts = {}
+                for tr in traces:
+                    if tr.endswith('/v'): volts[tr] = traces[tr]
+
+                analysis_data=analysis.NetworkAnalysis(volts,
+                                                   times,
+                                                   self.analysis_var,
+                                                   start_analysis=0,
+                                                   end_analysis=times[-1],
+                                                   smooth_data=False,
+                                                   show_smoothed_data=False,
+                                                   verbose=True)
+                                                   
+                analysed = analysis_data.analyse()
+                print analysed
+                self.report[ref_here]['analysis'] = {}
+                for a in analysed:
+                    ref,var = a.split(':')
+                    if not ref in self.report[ref_here]['analysis']:
+                        self.report[ref_here]['analysis'][ref] = {}
+                    self.report[ref_here]['analysis'][ref][var] = analysed[a]
+                    
+                #self.report[ref_here]['parameters']
+                
                 self.complete += 1
                 
-        self.runner.finish()
 
 
     def run(self):
 
         print("Running")
         self._sweep(self.vary, self.fixed)
+        self.runner.finish()
+        
+        return self.report
         
         
 class NeuroMLliteRunner():
@@ -102,6 +142,8 @@ class NeuroMLliteRunner():
                     label = '%s (%s)'%(y, kwargs)
                     self.ax.plot(traces['t'],traces[y],label=label)
                     
+        return traces, events 
+                    
     def finish(self):
         
         if self.plot_all:
@@ -120,10 +162,10 @@ if __name__ == '__main__':
 
 
     vary = {'stim_amp':['%spA'%(i/10.0) for i in xrange(-10,20,2)]}
-    vary = {'stim_amp':['%spA'%(i/10.0) for i in xrange(-10,20,5)]}
+    vary = {'stim_amp':['%spA'%(i/10.0) for i in xrange(-10,0,5)]}
     #vary = {'stim_amp':['1.5pA']}
     
-    nmllr = NeuroMLliteRunner('Sim_IClamp_PV.json')
+    #nmllr = NeuroMLliteRunner('Sim_IClamp_PV.json')
     nmllr = NeuroMLliteRunner('Sim_IClamp_Pyr.json')
 
     if quick:
@@ -131,7 +173,8 @@ if __name__ == '__main__':
 
     ps = ParameterSweep(nmllr, vary, fixed)
 
-    ps.run()
+    report = ps.run()
+    pp.pprint(report)
     '''
     vary['i'] = [1,2,3]
 
