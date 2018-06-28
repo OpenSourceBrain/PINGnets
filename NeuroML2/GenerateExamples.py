@@ -26,6 +26,8 @@ def generate(ref):
 
     if 'PV' in ref:
         net.cells.append(Cell(id='PV', neuroml2_source_file='WangBuzsaki.cell.nml'))
+    if 'Pyr' in ref:
+        net.cells.append(Cell(id='Pyr', neuroml2_source_file='PyramidalCell.cell.nml'))
     
 
 
@@ -53,6 +55,19 @@ def generate(ref):
 
 
         net.populations.append(pop_pv)
+        
+    if 'Pyr' in ref:
+        comp = 'Pyr'
+        size = 1 if 'IClamp' in ref else 10
+        
+        pop_pyr = Population(id='pop_%s'%comp, 
+                            size=size, 
+                            component=comp, 
+                            properties={'color':colors[comp]},
+                            random_layout = RandomLayout(region=r1.id))
+
+
+        net.populations.append(pop_pyr)
 
 
     ################################################################################
@@ -78,9 +93,10 @@ def generate(ref):
 
         net.input_sources.append(input_source)
 
+        pop = pop_pyr if 'Pyr' in ref else pop_pv
         net.inputs.append(Input(id='Stim0',
                                 input_source=input_source.id,
-                                population=pop_pv.id,
+                                population=pop.id,
                                 percentage=100))
         
     else:
@@ -132,5 +148,6 @@ def generate(ref):
 if __name__ == "__main__":
     
     #generate('IFcurve_PV')
-    generate('IClamp_PV')
+    #generate('IClamp_PV')
+    generate('IClamp_Pyr')
     
