@@ -45,6 +45,7 @@ def generate(ref):
 
     if 'PV' in ref:
         comp = 'PV'
+        duration = 3000
         size = 1 if 'IClamp' in ref else 10
         
         pop_pv = Population(id='pop_%s'%comp, 
@@ -58,6 +59,7 @@ def generate(ref):
         
     if 'Pyr' in ref:
         comp = 'Pyr'
+        duration = 3000
         size = 1 if 'IClamp' in ref else 10
         
         pop_pyr = Population(id='pop_%s'%comp, 
@@ -89,7 +91,7 @@ def generate(ref):
         net.parameters['stim_amp'] = '1.25pA'
         input_source = InputSource(id='iclamp_0', 
                                    neuroml2_input='PulseGenerator', 
-                                   parameters={'amplitude':'stim_amp', 'delay':'50ms', 'duration':'500ms'})
+                                   parameters={'amplitude':'stim_amp', 'delay':'0ms', 'duration':'%sms'%duration})
 
         net.input_sources.append(input_source)
 
@@ -128,7 +130,7 @@ def generate(ref):
 
     sim = Simulation(id='Sim_%s'%ref,
                      network=new_file,
-                     duration='600',
+                     duration=duration,
                      dt='0.025',
                      recordTraces={'all':'*'})
 
@@ -148,6 +150,6 @@ def generate(ref):
 if __name__ == "__main__":
     
     #generate('IFcurve_PV')
-    #generate('IClamp_PV')
-    generate('IClamp_Pyr')
+    generate('IClamp_PV')
+    #generate('IClamp_Pyr')
     

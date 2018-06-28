@@ -1,15 +1,15 @@
 {
-    "IClamp_PV": {
+    "IClamp_Pyr": {
         "version": "NeuroMLlite v0.1.4", 
         "temperature": 37.0, 
         "parameters": {
             "stim_amp": "1.25pA"
         }, 
-        "notes": "A simple network: IClamp_PV.", 
+        "notes": "A simple network: IClamp_Pyr.", 
         "cells": [
             {
-                "PV": {
-                    "neuroml2_source_file": "WangBuzsaki.cell.nml"
+                "Pyr": {
+                    "neuroml2_source_file": "PyramidalCell.cell.nml"
                 }
             }
         ], 
@@ -46,11 +46,11 @@
         ], 
         "populations": [
             {
-                "pop_PV": {
+                "pop_Pyr": {
                     "size": 1, 
-                    "component": "PV", 
+                    "component": "Pyr", 
                     "properties": {
-                        "color": "0 0 .8"
+                        "color": ".8 0 0"
                     }, 
                     "random_layout": {
                         "region": "region1"
@@ -62,7 +62,7 @@
             {
                 "Stim0": {
                     "input_source": "iclamp_0", 
-                    "population": "pop_PV", 
+                    "population": "pop_Pyr", 
                     "percentage": 100.0
                 }
             }
