@@ -120,9 +120,11 @@ if __name__ == '__main__':
 
 
     vary = {'stim_amp':['%spA'%(i/10.0) for i in xrange(-10,20,2)]}
+    vary = {'stim_amp':['%spA'%(i/10.0) for i in xrange(-10,20,5)]}
     #vary = {'stim_amp':['1.5pA']}
     
     nmllr = NeuroMLliteRunner('Sim_IClamp_PV.json')
+    nmllr = NeuroMLliteRunner('Sim_IClamp_Pyr.json')
 
     if quick:
         pass

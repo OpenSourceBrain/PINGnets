@@ -11,3 +11,6 @@
 /NeuroML2/.ipynb_checkpoints
 /NeuroML2/report.*.txt
 /NeuroML2/Sim*.json
+/NeuroML2/LEMS_Test_k_chan_pyr.xml
+/NeuroML2/LEMS_Test_na_chan_pyr.xml
+/NeuroML2/LEMS_Sim_IClamp_Pyr.xml

@@ -1,7 +1,7 @@
 <neuroml xmlns="http://www.neuroml.org/schema/neuroml2"  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.neuroml.org/schema/neuroml2 https://raw.github.com/NeuroML/NeuroML2/development/Schemas/NeuroML2/NeuroML_v2beta5.xsd" id="IClamp_Pyr">
     <notes>Generated network</notes>
     <include href="PyramidalCell.cell.nml"/>
-    <pulseGenerator id="iclamp_0" delay="50ms" duration="500ms" amplitude="1.25pA"/>
+    <pulseGenerator id="iclamp_0" delay="50ms" duration="500ms" amplitude="1.5pA"/>
     <network id="IClamp_Pyr" type="networkWithTemperature" temperature="37.0degC">
         <notes>A simple network: IClamp_Pyr.</notes>
         <population id="pop_Pyr" component="Pyr" size="1" type="populationList">
