@@ -1,5 +1,6 @@
 from neuromllite import *
 from neuromllite.NetworkGenerator import *
+import sys
 
 colors = {'Pyr':'.8 0 0','PV':'0 0 .8'}
 
@@ -149,7 +150,12 @@ def generate(ref):
 
 if __name__ == "__main__":
     
-    #generate('IFcurve_PV')
-    generate('IClamp_PV')
-    #generate('IClamp_Pyr')
+    if '-all' in sys.argv:
+        generate('IClamp_PV')
+        generate('IClamp_Pyr')
+        
+    else:
+        #generate('IFcurve_PV')
+        generate('IClamp_PV')
+        #generate('IClamp_Pyr')
     

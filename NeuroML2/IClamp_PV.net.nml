@@ -1,5 +1,7 @@
 <neuroml xmlns="http://www.neuroml.org/schema/neuroml2"  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.neuroml.org/schema/neuroml2 https://raw.github.com/NeuroML/NeuroML2/development/Schemas/NeuroML2/NeuroML_v2beta5.xsd" id="IClamp_PV">
-    <notes>Generated network</notes>
+    <notes>Generated network: IClamp_PV
+    NeuroMLlite parameters: 
+        stim_amp = 1.25pA</notes>
     <include href="WangBuzsaki.cell.nml"/>
     <pulseGenerator id="iclamp_0" delay="0ms" duration="3000ms" amplitude="1.25pA"/>
     <network id="IClamp_PV" type="networkWithTemperature" temperature="37.0degC">
