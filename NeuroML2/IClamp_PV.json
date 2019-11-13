@@ -1,0 +1,66 @@
+{
+    "IClamp_PV": {
+        "version": "NeuroMLlite v0.1.9", 
+        "temperature": 34.0, 
+        "parameters": {
+            "stim_amp": "3pA", 
+            "stim_delay": "100ms", 
+            "stim_dur": "500ms"
+        }, 
+        "notes": "A network model: IClamp_PV", 
+        "cells": [
+            {
+                "PV": {
+                    "neuroml2_source_file": "WangBuzsaki.cell.nml"
+                }
+            }
+        ], 
+        "input_sources": [
+            {
+                "iclamp_0": {
+                    "neuroml2_input": "PulseGenerator", 
+                    "parameters": {
+                        "delay": "stim_delay", 
+                        "duration": "stim_dur", 
+                        "amplitude": "stim_amp"
+                    }
+                }
+            }
+        ], 
+        "regions": [
+            {
+                "CA1": {
+                    "x": 0.0, 
+                    "y": 0.0, 
+                    "z": 0.0, 
+                    "width": 1000.0, 
+                    "height": 100.0, 
+                    "depth": 1000.0
+                }
+            }
+        ], 
+        "populations": [
+            {
+                "pop_PV": {
+                    "size": 1, 
+                    "component": "PV", 
+                    "properties": {
+                        "color": "0.1254902 0.69803922 0.66666667"
+                    }, 
+                    "random_layout": {
+                        "region": "CA1"
+                    }
+                }
+            }
+        ], 
+        "inputs": [
+            {
+                "Stim_iclamp_0": {
+                    "input_source": "iclamp_0", 
+                    "population": "pop_PV", 
+                    "percentage": 100.0
+                }
+            }
+        ]
+    }
+}

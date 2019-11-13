@@ -15,3 +15,5 @@
 /NeuroML2/LEMS_Test_na_chan_pyr.xml
 /NeuroML2/LEMS_Sim_IClamp_Pyr.xml
 /NeuroML2/*.png
+/NeuroML2/ParamSweep_*
+/NeuroML2/*.gv*

@@ -1,161 +1,82 @@
 from neuromllite import *
 from neuromllite.NetworkGenerator import *
+from neuromllite.utils import create_new_model
 import sys
 
-colors = {'Pyr':'.8 0 0','PV':'0 0 .8'}
+colors = {'HH':'0 0 .8',"PV":"0.1254902 0.69803922 0.66666667","Pyr":"0.25490196 0.41176471 0.88235294"}
 
-def generate(ref):
+def generate(cell, duration, config='IClamp'):
     
-    ################################################################################
-    ###   Build a new network
+    reference = "%s_%s"%(config, cell)
 
-    net = Network(id=ref)
-    net.notes = "A simple network: %s."%ref
-    net.temperature = 37 # degC
-    net.parameters = {}
+    cell_id = '%s'%cell
+    if cell=='PV':
+        cell_nmll = Cell(id=cell_id, neuroml2_source_file='WangBuzsaki.cell.nml')
+    if cell=='Pyr':
+        cell_nmll = Cell(id=cell_id, neuroml2_source_file='PyramidalCell.cell.nml')
+    synapses = []
     
-
-    ################################################################################
-    ###   Add some regions
-    
-    r1 = RectangularRegion(id='region1', x=0,y=0,z=0,width=1000,height=100,depth=1000)
-    net.regions.append(r1)
-
-
-    ################################################################################
-    ###   Add some cells
-
-    if 'PV' in ref:
-        net.cells.append(Cell(id='PV', neuroml2_source_file='WangBuzsaki.cell.nml'))
-    if 'Pyr' in ref:
-        net.cells.append(Cell(id='Pyr', neuroml2_source_file='PyramidalCell.cell.nml'))
-    
-
-
-    ################################################################################
-    ###   Add some synapses
-    
-    ampa = 'wbsFake'
-    net.synapses.append(Synapse(id=ampa, 
-                                lems_source_file='WangBuzsakiSynapse.xml'))
-
-
-
-    ################################################################################
-    ###   Add some populations
-
-    if 'PV' in ref:
-        comp = 'PV'
-        duration = 3000
-        size = 1 if 'IClamp' in ref else 10
-        
-        pop_pv = Population(id='pop_%s'%comp, 
-                            size=size, 
-                            component=comp, 
-                            properties={'color':colors[comp]},
-                            random_layout = RandomLayout(region=r1.id))
-
-
-        net.populations.append(pop_pv)
-        
-    if 'Pyr' in ref:
-        comp = 'Pyr'
-        duration = 3000
-        size = 1 if 'IClamp' in ref else 10
-        
-        pop_pyr = Population(id='pop_%s'%comp, 
-                            size=size, 
-                            component=comp, 
-                            properties={'color':colors[comp]},
-                            random_layout = RandomLayout(region=r1.id))
-
-
-        net.populations.append(pop_pyr)
-
-
-    ################################################################################
-    ###   Add a projection
-
-    '''
-    net.projections.append(Projection(id='proj0',
-                                      presynaptic=p0.id, 
-                                      postsynaptic=p1.id,
-                                      synapse='ampa'))
-
-    net.projections[0].random_connectivity=RandomConnectivity(probability=0.5)'''
-    
- 
     ################################################################################
     ###   Add some inputs
     
-    if 'IClamp' in ref:
-        net.parameters['stim_amp'] = '1.25pA'
+    if 'IClamp' in config:
+        parameters = {}
+        parameters['stim_amp'] = '3pA'
+        parameters['stim_delay'] = '100ms'
+        parameters['stim_dur'] = '500ms'
         input_source = InputSource(id='iclamp_0', 
                                    neuroml2_input='PulseGenerator', 
-                                   parameters={'amplitude':'stim_amp', 'delay':'0ms', 'duration':'%sms'%duration})
-
-        net.input_sources.append(input_source)
-
-        pop = pop_pyr if 'Pyr' in ref else pop_pv
-        net.inputs.append(Input(id='Stim0',
-                                input_source=input_source.id,
-                                population=pop.id,
-                                percentage=100))
+                                   parameters={'amplitude':'stim_amp', 'delay':'stim_delay', 'duration':'stim_dur'})
+      
         
-    else:
+    elif 'PoissonFiringSynapse' in config:
+        
+        syn_exc = Synapse(id='wbs1', 
+                      neuroml2_source_file='WangBuzsakiSynapse.synapse.nml')
+    
+        synapses.append(syn_exc)
 
+        parameters = {}
+        parameters['average_rate'] = '100 Hz'
+        parameters['number_per_cell'] = '10'
         input_source = InputSource(id='pfs0', 
                                    neuroml2_input='PoissonFiringSynapse', 
-                                   parameters={'average_rate':'50 Hz', 'synapse':ampa, 'spike_target':"./%s"%ampa})
+                                   parameters={'average_rate':'average_rate', 
+                                               'synapse':syn_exc.id, 
+                                               'spike_target':"./%s"%syn_exc.id})
+        
 
-        net.input_sources.append(input_source)
-
-
-        net.inputs.append(Input(id='Stim0',
-                                input_source=input_source.id,
-                                population=pop_pv.id,
-                                percentage=100))
-
-
-    ################################################################################
-    ###   Save to JSON format
-
-    net.id = ref
-
-    print(net.to_json())
-    new_file = net.to_json_file('Example_%s.json'%net.id)
+    network_filename = '%s.json'%reference         
     
-
-    ################################################################################
-    ###   Build Simulation object & save as JSON
-
-    sim = Simulation(id='Sim_%s'%ref,
-                     network=new_file,
-                     duration=duration,
-                     dt='0.025',
-                     recordTraces={'all':'*'})
-
-    sim.to_json_file()
-
-
-    ################################################################################
-    ###   Export to some formats
-    ###   Try:
-    ###        python Example1.py -graph2
-
-    import sys
-    check_to_generate_or_run(sys.argv, sim)
+    sim, net = create_new_model(reference,
+                     duration, 
+                     dt=0.01, # ms 
+                     temperature=34, # degC
+                     default_region='CA1',
+                     parameters = parameters,
+                     cell_for_default_population=cell_nmll,
+                     color_for_default_population=colors[cell],
+                     input_for_default_population=input_source,
+                     synapses=synapses,
+                     network_filename=network_filename)
+                     
+                     
+    return sim, net
 
 
 
 if __name__ == "__main__":
     
     if '-all' in sys.argv:
-        generate('IClamp_PV')
-        generate('IClamp_Pyr')
+        
+        generate('PV',700,'IClamp')
+        generate('Pyr',700,'IClamp')
         
     else:
         #generate('IFcurve_PV')
-        generate('IClamp_PV')
+        #sim, net = generate('PV',700,'IClamp')
+        sim, net = generate('Pyr',700,'IClamp')
         #generate('IClamp_Pyr')
+        
+        check_to_generate_or_run(sys.argv, sim)
     

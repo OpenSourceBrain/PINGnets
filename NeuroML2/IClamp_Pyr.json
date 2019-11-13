@@ -1,0 +1,66 @@
+{
+    "IClamp_Pyr": {
+        "version": "NeuroMLlite v0.1.9", 
+        "temperature": 34.0, 
+        "parameters": {
+            "stim_amp": "3pA", 
+            "stim_delay": "100ms", 
+            "stim_dur": "500ms"
+        }, 
+        "notes": "A network model: IClamp_Pyr", 
+        "cells": [
+            {
+                "Pyr": {
+                    "neuroml2_source_file": "PyramidalCell.cell.nml"
+                }
+            }
+        ], 
+        "input_sources": [
+            {
+                "iclamp_0": {
+                    "neuroml2_input": "PulseGenerator", 
+                    "parameters": {
+                        "delay": "stim_delay", 
+                        "duration": "stim_dur", 
+                        "amplitude": "stim_amp"
+                    }
+                }
+            }
+        ], 
+        "regions": [
+            {
+                "CA1": {
+                    "x": 0.0, 
+                    "y": 0.0, 
+                    "z": 0.0, 
+                    "width": 1000.0, 
+                    "height": 100.0, 
+                    "depth": 1000.0
+                }
+            }
+        ], 
+        "populations": [
+            {
+                "pop_Pyr": {
+                    "size": 1, 
+                    "component": "Pyr", 
+                    "properties": {
+                        "color": "0.25490196 0.41176471 0.88235294"
+                    }, 
+                    "random_layout": {
+                        "region": "CA1"
+                    }
+                }
+            }
+        ], 
+        "inputs": [
+            {
+                "Stim_iclamp_0": {
+                    "input_source": "iclamp_0", 
+                    "population": "pop_Pyr", 
+                    "percentage": 100.0
+                }
+            }
+        ]
+    }
+}
