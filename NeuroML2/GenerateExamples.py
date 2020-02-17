@@ -3,7 +3,7 @@ from neuromllite.NetworkGenerator import *
 from neuromllite.utils import create_new_model
 import sys
 
-colors = {'HH':'0 0 .8',"PV":"0.1254902 0.69803922 0.66666667","Pyr":"0.25490196 0.41176471 0.88235294"}
+colors = {'HH':'0 0 .8',"PV":"0.1254902 0.69803922 0.66666667","Pyr":"0.25490196 0.41176471 0.88235294","PassiveCell":"0.5 0.5 0.5"}
 
 def generate(cell, duration, config='IClamp'):
     
@@ -14,6 +14,8 @@ def generate(cell, duration, config='IClamp'):
         cell_nmll = Cell(id=cell_id, neuroml2_source_file='WangBuzsaki.cell.nml')
     if cell=='Pyr':
         cell_nmll = Cell(id=cell_id, neuroml2_source_file='PyramidalCell.cell.nml')
+    if cell=='PassiveCell':
+        cell_nmll = Cell(id=cell_id, neuroml2_source_file='PassiveCell.cell.nml')
     synapses = []
     
     ################################################################################
@@ -64,9 +66,11 @@ def generate(cell, duration, config='IClamp'):
     chan_id_suffix = ''
     if cell=='Pyr':
         chan_id_suffix = '_pyr'
-    sim.recordVariables={'biophys/membraneProperties/na_all/na_chan%s/m/q'%chan_id_suffix:{'all':'*'},
-                         'biophys/membraneProperties/na_all/na_chan%s/h/q'%chan_id_suffix:{'all':'*'},
-                         'biophys/membraneProperties/k_all/k_chan%s/n/q'%chan_id_suffix:{'all':'*'},}
+        
+    if cell is not 'PassiveCell':
+        sim.recordVariables={'biophys/membraneProperties/na_all/na_chan%s/m/q'%chan_id_suffix:{'all':'*'},
+                             'biophys/membraneProperties/na_all/na_chan%s/h/q'%chan_id_suffix:{'all':'*'},
+                             'biophys/membraneProperties/k_all/k_chan%s/n/q'%chan_id_suffix:{'all':'*'},}
     sim.to_json_file()
                      
                      
@@ -80,6 +84,7 @@ if __name__ == "__main__":
         
         generate('PV',300,'IClamp')
         generate('Pyr',300,'IClamp')
+        generate('PassiveCell',300,'IClamp')
         
     else:
         #generate('IFcurve_PV')

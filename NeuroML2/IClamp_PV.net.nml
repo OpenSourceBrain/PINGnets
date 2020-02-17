@@ -3,11 +3,11 @@
     Generated network: IClamp_PV
     Generation seed: 1234
     NeuroMLlite parameters: 
-        stim_amp = 1pA
+        stim_amp = 14pA
         stim_delay = 50ms
-        stim_dur = 200ms</notes>
-    <include href="/home/padraig/git/PINGnets/NeuroML2/WangBuzsaki.cell.nml"/>
-    <pulseGenerator id="iclamp_0" delay="50ms" duration="200ms" amplitude="1pA"/>
+        stim_dur = 20ms</notes>
+    <include href="WangBuzsaki.cell.nml"/>
+    <pulseGenerator id="iclamp_0" delay="50ms" duration="20ms" amplitude="14pA"/>
     <network id="IClamp_PV" type="networkWithTemperature" temperature="34.0degC">
         <notes>A network model: IClamp_PV</notes>
         <property tag="recommended_dt_ms" value="0.01"/>
