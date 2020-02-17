@@ -59,7 +59,7 @@
 
                 <spikeThresh value="0 mV"/>
                 <specificCapacitance value="1.0 uF_per_cm2"/>
-                <initMembPotential value="-70.0 mV"/>
+                <initMembPotential value="-66.5 mV"/>
 
             </membraneProperties>
 

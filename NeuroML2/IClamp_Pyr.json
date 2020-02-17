@@ -3,9 +3,9 @@
         "version": "NeuroMLlite v0.1.9", 
         "temperature": 34.0, 
         "parameters": {
-            "stim_amp": "3pA", 
-            "stim_delay": "100ms", 
-            "stim_dur": "500ms"
+            "stim_amp": "1pA", 
+            "stim_delay": "50ms", 
+            "stim_dur": "200ms"
         }, 
         "notes": "A network model: IClamp_Pyr", 
         "cells": [

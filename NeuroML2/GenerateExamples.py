@@ -21,9 +21,9 @@ def generate(cell, duration, config='IClamp'):
     
     if 'IClamp' in config:
         parameters = {}
-        parameters['stim_amp'] = '3pA'
-        parameters['stim_delay'] = '100ms'
-        parameters['stim_dur'] = '500ms'
+        parameters['stim_amp'] = '1pA'
+        parameters['stim_delay'] = '50ms'
+        parameters['stim_dur'] = '200ms'
         input_source = InputSource(id='iclamp_0', 
                                    neuroml2_input='PulseGenerator', 
                                    parameters={'amplitude':'stim_amp', 'delay':'stim_delay', 'duration':'stim_dur'})
@@ -59,6 +59,15 @@ def generate(cell, duration, config='IClamp'):
                      input_for_default_population=input_source,
                      synapses=synapses,
                      network_filename=network_filename)
+             
+                    
+    chan_id_suffix = ''
+    if cell=='Pyr':
+        chan_id_suffix = '_pyr'
+    sim.recordVariables={'biophys/membraneProperties/na_all/na_chan%s/m/q'%chan_id_suffix:{'all':'*'},
+                         'biophys/membraneProperties/na_all/na_chan%s/h/q'%chan_id_suffix:{'all':'*'},
+                         'biophys/membraneProperties/k_all/k_chan%s/n/q'%chan_id_suffix:{'all':'*'},}
+    sim.to_json_file()
                      
                      
     return sim, net
@@ -69,13 +78,13 @@ if __name__ == "__main__":
     
     if '-all' in sys.argv:
         
-        generate('PV',700,'IClamp')
-        generate('Pyr',700,'IClamp')
+        generate('PV',300,'IClamp')
+        generate('Pyr',300,'IClamp')
         
     else:
         #generate('IFcurve_PV')
         #sim, net = generate('PV',700,'IClamp')
-        sim, net = generate('Pyr',700,'IClamp')
+        sim, net = generate('Pyr',300,'IClamp')
         #generate('IClamp_Pyr')
         
         check_to_generate_or_run(sys.argv, sim)
