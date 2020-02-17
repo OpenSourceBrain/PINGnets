@@ -17,3 +17,5 @@
 /NeuroML2/*.png
 /NeuroML2/ParamSweep_*
 /NeuroML2/*.gv*
+/NeuroML2/LEMS_Test_k_chan.xml
+/NeuroML2/LEMS_Test_na_chan.xml
